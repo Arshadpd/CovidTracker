@@ -22,8 +22,20 @@ export const POST = async (NextRequest) => {
 
         const validPassword = await bcryptjs.compare(password, user.password);
         if (!validPassword) {
-            return new Response("Incorrect Password", { status: 400 });
+            user.loginattempts += 1;
+            await user.save();
+
+        if (user.loginattempts >= 3) {
+            user.isblocked=true;
+            await user.save();
+            return new Response("Account locked. Too many failed login attempts.", { status: 401 });
         }
+
+        return new Response("Incorrect Password", { status: 400 });
+        }
+        // Reset login attempts on successful login
+        user.loginattempts = 0;
+        await user.save();
 
         const tokenData = {
             username: user.username,

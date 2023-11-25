@@ -57,7 +57,22 @@ const Profile = () => {
         {covidData && (
           <div className="mt-4">
             <h2 className="text-lg font-bold">COVID Data:</h2>
-            <pre>{JSON.stringify(covidData, null, 2)}</pre>
+            <table className="mt-2 w-full">
+              <thead>
+                <tr>
+                  {Object.keys(covidData).map((key) => (
+                    <th key={key} className="border px-4 py-2">{key}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {Object.values(covidData).map((value, index) => (
+                    <td key={index} className="border px-4 py-2">{value}</td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
           </div>
         )}
       </div>

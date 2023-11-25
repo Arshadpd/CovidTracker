@@ -7,7 +7,8 @@ import axios from "axios";
 
 const defaultData = { username: "", password: "" };
 
-const Login = () => {
+const Login = () => 
+{
     const [data, setData] = useState(defaultData);
 
     const router = useRouter();
@@ -16,6 +17,9 @@ const Login = () => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
 
+    const [loginAttempts, setLoginAttempts] = useState(0);
+    const [isLocked, setIsLocked] = useState(false);
+
     const onLogin = async (e) => {
         e.preventDefault();
 
@@ -23,16 +27,25 @@ const Login = () => {
             alert("Please fill all mandatory paramters");
             return;
         }
-
+        console.log("Before login");
         try {
             const response = await axios.post('/api/users/login', data);
-            setData(defaultData);
+            //setData(defaultData);
             
             if (response.status === 200) {
+                setLoginAttempts(0);
+                setData(defaultData);          
                 router.push('/profile');
             }
         } catch (error) {
             console.log(error);
+            setLoginAttempts(loginAttempts + 1);
+            if (loginAttempts >= 3) {
+                setIsLocked(true);
+                alert('Account locked. Please try again later.');
+              } else {
+                alert('Invalid credentials. Please try again.');
+              }
         }
     }
 
