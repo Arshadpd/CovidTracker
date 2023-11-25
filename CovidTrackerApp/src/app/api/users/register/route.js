@@ -16,6 +16,7 @@ export const POST = async (NextRequest) => {
         }
 
         const user = await User.findOne({ username });
+
         if (user) {
             return new Response("Username already exist", { status: 400 });
         }
@@ -29,7 +30,9 @@ export const POST = async (NextRequest) => {
             password: hashedPassword,
         })
 
-        await newUser.save();
+        if (isValidUsername(username) && isValidPassword(password)) {
+            await newUser.save();
+        } 
         
         return new Response("User saved successfully", { status: 200 });
     } catch (error) {
