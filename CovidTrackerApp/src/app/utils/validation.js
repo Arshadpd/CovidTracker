@@ -7,6 +7,6 @@ export function isValidUsername(username) {
   
   export function isValidPassword(password) {
     // Add your validation logic here
-    return password.length === 6 &&  /^[a-zA-Z0-9@!]+$/.test(password);
+    return password.length === 9 &&  /^[a-zA-Z0-9@!]+$/.test(password);
   }
   
