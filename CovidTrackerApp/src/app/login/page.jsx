@@ -22,14 +22,19 @@ const Login = () => {
         e.preventDefault();
 
         if (!data.username || !data.password) {
-            alert("Please fill all mandatory paramters");
+            alert('Please fill all mandatory paramters');
             return;
         }
-        
-        if(!isValidUsername(data.username) || !isValidPassword(data.password)){
-            alert("Please enter valid username & password");
+
+        if(!isValidUsername(data.username)){
+            alert('Please enter valid username & password');
             return;
         }
+
+        if(!isValidPassword(data.password)){
+                alert('Please enter valid username & password');
+                return;
+            }
 
         try {
             const response = await axios.post('/api/users/login', data);
@@ -39,7 +44,8 @@ const Login = () => {
                 router.push('/profile');
             }
         } catch (error) {
-            console.log(error);
+            alert(error.response.data);
+            console.log(error.response.data);
         }
     }
 
