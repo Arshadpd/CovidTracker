@@ -1,7 +1,7 @@
 import Connection from '@/database/config';
 import User from '@/models/user';
 import bcryptjs from 'bcryptjs';
-import { NextRequest, NextResponse } from 'next/server';
+import { isValidPassword, isValidUsername } from '@/app/utils/validation';
 
 Connection();
 
