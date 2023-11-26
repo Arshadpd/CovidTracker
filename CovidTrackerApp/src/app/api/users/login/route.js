@@ -20,22 +20,23 @@ export const POST = async (NextRequest) => {
             return new Response("Username does not exist", { status: 400 });
         }
 
+        if (user.isblocked) {
+            return new Response("Account Locked.Please try again after 24hrs", { status: 401 });
+        }
+        
         const validPassword = await bcryptjs.compare(password, user.password);
         if (!validPassword) {
             user.loginattempts += 1;
             await user.save();
 
-        if (user.loginattempts >= 3) {
-            user.isblocked=true;
-            await user.save();
-            return new Response("Account locked. Too many failed login attempts.", { status: 401 });
-        }
+            if (user.loginattempts >= 3) {
+                user.isblocked=true;
+                await user.save();
+                return new Response("Account locked. Too many failed login attempts.", { status: 401 });
+            }
 
-        return new Response("Incorrect Password", { status: 400 });
+            return new Response("Incorrect Password", { status: 400 });
         }
-        // Reset login attempts on successful login
-        user.loginattempts = 0;
-        await user.save();
 
         const tokenData = {
             username: user.username,
