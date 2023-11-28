@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { isValidUsername, isValidPassword } from '../utils/validation';
+import { isPasswordStrong, isValidUsername, isValidPassword } from '../utils/validation';
 
 const defaultData = { name: "", username: "", password: "" };
 
@@ -25,10 +25,21 @@ const Register = () => {
             return;
         }
         
-        if(!isValidUsername(data.username) || !isValidPassword(data.password)){
-            alert("Please enter valid username & password");
+        if(!isValidUsername(data.username)){
+            alert('Please enter valid username & password');
             return;
         }
+
+        if(!isValidPassword(data.password)){
+            alert('Please enter valid username & password');
+            return;
+        }
+        
+        if(!isPasswordStrong(data.password)){
+            alert("Password must be at least 8 characters, must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and special character.");
+            return;
+        }
+        
         try {
             const response = await axios.post('/api/users/register', data);
             setData(defaultData);
